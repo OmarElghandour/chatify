@@ -17,7 +17,7 @@ const Account = () => {
                 <h1 className="account__user-name">jesca jones</h1>
 
                 <div className="account__user-status row">
-                    <i class='bx bx-radio-circle-marked icon active' ></i>
+                    <i className='bx bx-radio-circle-marked icon active' ></i>
                     <h3>active</h3>
                 </div>
             </div>
@@ -31,9 +31,9 @@ const Account = () => {
 
                 <div>
                     <button id="1" className="account__about collabse-button" {...getToggleProps()}>
-                        <i class='bx bx-user' ></i>
+                        <i className='bx bx-user' ></i>
                         <h3>about</h3>
-                        <i class='bx bx-down-arrow-alt button-arrow' ></i>
+                        <i className='bx bx-down-arrow-alt button-arrow' ></i>
                     </button>
 
                     <section className="collapsed-content" {...getCollapseProps()}>
@@ -43,9 +43,9 @@ const Account = () => {
 
                 <div>
                     <button id="2" className="account__about collabse-button" {...getToggleProps()}>
-                        <i class='bx bx-user' ></i>
+                        <i className='bx bx-user' ></i>
                         <h3>attached files</h3>
-                        <i class='bx bx-down-arrow-alt button-arrow' ></i>
+                        <i className='bx bx-down-arrow-alt button-arrow' ></i>
                     </button>
 
                     <section className="collapsed-content" {...getCollapseProps()}>
