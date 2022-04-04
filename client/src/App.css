@@ -117,6 +117,13 @@ img {
   color: white;
 }
 
+.btn {
+  padding: .5rem;
+  background-color: transparent;
+  border: 1px solid var(--first-color);
+  color: white;
+  border-radius: .5rem;
+}
 /*=============== THEME ===============*/
 
 
@@ -335,10 +342,13 @@ nav {
 }
 
 .form-control {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #303841;
+  line-height: 3rem;
+  border-radius: .2rem;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  padding: .5rem;
 }
 
 .search-input {
@@ -512,6 +522,18 @@ input::placeholder {
   transform: translatey(50%);
 
 }
+
+
+
+
+
+
+.login-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 /*=============== SERVICES ===============*/
 
 
