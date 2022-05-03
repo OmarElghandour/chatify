@@ -72,9 +72,8 @@ html {
 }
 
 body,
-button,
-input,
-textarea {
+button
+ {
   font-family: var(--body-font);
   font-size: var(--normal-font-size);
   text-transform: capitalize;
@@ -113,6 +112,9 @@ img {
   padding: 0;
 }
 
+textarea {
+  color: black;
+}
 .nav__item {
   color: white;
 }
@@ -139,8 +141,8 @@ img {
 /*=============== REUSABLE CSS CLASSES ===============*/
 .container {
   max-width: 968px;
-  margin-left: 1rem;
-  margin-right: 1rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* .grid {
@@ -349,6 +351,11 @@ nav {
   font-size: 1rem;
   margin-bottom: 1rem;
   padding: .5rem;
+  width: 100%;
+}
+
+.form-group{
+  width: 100%;
 }
 
 .search-input {
@@ -498,9 +505,8 @@ input::placeholder {
 }
  
 .chat-input {
-  width: 100%;
   height: 4rem;
-  color: white;
+  color: black;
 }
 
 .chat-input:focus {
@@ -510,7 +516,7 @@ input::placeholder {
 
 
 .message-area {
-  position: fixed;
+  /* position: fixed; */
   bottom: 1rem;
   display: flex;
   width: 100%;
@@ -523,15 +529,18 @@ input::placeholder {
 
 }
 
-
-
-
-
-
 .login-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 8rem;
+}
+
+.chat__details {
+  display: grid;
+  height: 100vh;
+  overflow: scroll;
+  grid-auto-rows: 1fr 10fr 1fr;
 }
 
 /*=============== SERVICES ===============*/

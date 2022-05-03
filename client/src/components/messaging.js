@@ -1,15 +1,15 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { useOutletContext } from "react-router-dom";
-
+import axios from "axios";
+import React, { useContext } from "react";
+import { UsersContext } from "../context/userProvider";
 
 
 const Messaging = () => {
-    const navigate = useNavigate();
-    const [chatId, setChatId] = useOutletContext();
-  
-    const handleClick = (chatId) => {
-        setChatId(chatId);
+    const context = useContext(UsersContext);
+    const [users] = context.users;
+    const [activeChat, setActiveChat] = context.activeChat;
+
+    const handleClick = (userId) => {
+        setActiveChat(userId);
     }
 
     return (
@@ -53,84 +53,21 @@ const Messaging = () => {
 
             </div>
 
+
+
             <div className="messaging__chats col">
-                <div onClick={() => handleClick(14)} className="messaging__chat row">
+
+            {users.map((user) => (  
+                <div key={user._id} onClick={() => handleClick(user._id)} className="messaging__chat row">
                     <img className="messaging__chat-img" alt="" src="/about.jpg"/>
                     <div className="messaging__chat-details" >
-                    <h5 className="messaging__chat-username">jesca jones</h5>
+                    <h5 className="messaging__chat-username">{user.userName}</h5>
                     <p className="messaging__chat-latest">Lorem Ipsum is simply dummy</p>
                     </div>
                 </div>
+                ))
+            }
 
-                <div onClick={() => handleClick(10)} className="messaging__chat row">
-                    <img className="messaging__chat-img" alt="" src="/about.jpg"/>
-                    <div className="messaging__chat-details" >
-                    <h5 className="messaging__chat-username">jesca jones</h5>
-                    <p className="messaging__chat-latest">Lorem Ipsum is simply dummy</p>
-                    </div>
-                </div>
-
-
-
-                <div className="messaging__chat row">
-                    <img className="messaging__chat-img" alt="" src="/about.jpg"/>
-                    <div className="messaging__chat-details" >
-                    <h5 className="messaging__chat-username">jesca jones</h5>
-                    <p className="messaging__chat-latest">Lorem Ipsum is simply dummy</p>
-                    </div>
-                </div>
-
-                <div className="messaging__chat row">
-                    <img className="messaging__chat-img" alt="" src="/about.jpg"/>
-                    <div className="messaging__chat-details" >
-                    <h5 className="messaging__chat-username">jesca jones</h5>
-                    <p className="messaging__chat-latest">Lorem Ipsum is simply dummy</p>
-                    </div>
-                </div>
-
-
-                <div className="messaging__chat row">
-                    <img className="messaging__chat-img" alt="" src="/about.jpg"/>
-                    <div className="messaging__chat-details" >
-                    <h5 className="messaging__chat-username">jesca jones</h5>
-                    <p className="messaging__chat-latest">Lorem Ipsum is simply dummy</p>
-                    </div>
-                </div>
-
-                <div className="messaging__chat row">
-                    <img className="messaging__chat-img" alt="" src="/about.jpg"/>
-                    <div className="messaging__chat-details" >
-                    <h5 className="messaging__chat-username">jesca jones</h5>
-                    <p className="messaging__chat-latest">Lorem Ipsum is simply dummy</p>
-                    </div>
-                </div>
-
-
-                <div className="messaging__chat row">
-                    <img className="messaging__chat-img" alt="" src="/about.jpg"/>
-                    <div className="messaging__chat-details" >
-                    <h5 className="messaging__chat-username">jesca jones</h5>
-                    <p className="messaging__chat-latest">Lorem Ipsum is simply dummy</p>
-                    </div>
-                </div>
-
-
-                <div className="messaging__chat row">
-                    <img className="messaging__chat-img" alt="" src="/about.jpg"/>
-                    <div className="messaging__chat-details" >
-                    <h5 className="messaging__chat-username">jesca jones</h5>
-                    <p className="messaging__chat-latest">Lorem Ipsum is simply dummy</p>
-                    </div>
-                </div>
-
-
-                <div className="messaging__chat row">
-                    <img className="messaging__chat-img" alt="" src="/about.jpg"/>
-                    <div className="messaging__chat-details" >
-                    <h5 className="messaging__chat-username">jesca jones</h5>
-                    <p className="messaging__chat-latest">Lorem Ipsum is simply dummy</p>
-                    </div>
-                </div>
 
             </div>
         </section>

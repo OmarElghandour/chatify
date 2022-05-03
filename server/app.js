@@ -18,7 +18,7 @@ const jwt = require("jsonwebtoken");
 require('dotenv').config();
 app.use(cors());
 
-
+const clients = {};
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -40,6 +40,8 @@ wss.on('connection', function connection(ws) {
     wss.clients.forEach(function each(client) {
       if (client !== ws && client.readyState === WebSocket.OPEN) {
         console.log(data.toString());
+        // const userId = JSON.parse(data.toString()).userId;
+        // clients[userId] = client;
         client.send(data.toString());
       }
     });
@@ -99,7 +101,6 @@ app.post('/login', async (request, response) => {
 
   const user = userEmail || userName;
 
-  console.log(user);
   if (!user) {
     return response.status(401).send({ message: 'email or password doesnt exist' });
   }
@@ -122,9 +123,20 @@ app.post('/login', async (request, response) => {
   // save user token
   user.token = token;
 
-  console.log(token);
-  return response.send({ 'message': 'valid email and password', token });
+  const userData = {
+    id: user._id,
+    token : token,
+  };
+  return response.send({ 'message': 'valid email and password', userData });
 });
+
+
+app.get('/users', async(request, response) => {
+  const users = await User.find();
+  return response.send(users);
+});
+
+
 
 // error handler
 app.use(function (err, req, res, next) {

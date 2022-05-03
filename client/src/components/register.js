@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 const BASE_URL = process.env.REACT_APP_API;
 
  const Register = () => {
+    const navigate = useNavigate();
 
     const initialState = {
         userName : "",
@@ -17,6 +19,7 @@ const BASE_URL = process.env.REACT_APP_API;
         axios.post(BASE_URL + '/register', inputs)
         .then(data => {
             console.log(data);
+            navigate("/login");
         }).catch(e => {
             console.log(e)
         })
@@ -27,9 +30,9 @@ const BASE_URL = process.env.REACT_APP_API;
     },[inputs]);
 
     return(
-        <div className="login-wrapper section">
+        <div className="login-wrapper section container">
             <h1 className='section__title'>Please Log In</h1>
-            <form onSubmit={event => handleSubmit(event)}>
+            <form onSubmit={event => handleSubmit(event)} className="form-group">
                 <label>
                     <p>Username</p>
                     <input 

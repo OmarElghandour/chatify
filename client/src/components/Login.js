@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 const BASE_URL = process.env.REACT_APP_API;
 
  const Login = () => {
-    let navigate = useNavigate();
-
+    const navigate = useNavigate();
     const initialState = {
         userName : "",
         password : ""
@@ -17,9 +16,9 @@ const BASE_URL = process.env.REACT_APP_API;
         event.preventDefault();
         axios.post(BASE_URL + '/login', inputs)
         .then(response => {
-            console.log(response);
-            localStorage.setItem("token", response.data.token);
-            navigate.push("/", { replace: true });
+            console.log(response.data.userData);
+            localStorage.setItem("userData", JSON.stringify(response.data.userData));
+            navigate("/");
         }).catch(e => {
             console.log(e)
         })
