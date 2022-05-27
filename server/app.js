@@ -35,18 +35,56 @@ app.use(morgan('combined'));
 
 const wss = new WebSocket.Server({ port: 8080 });
 
-wss.on('connection', function connection(ws) {
-  ws.on('message', function incoming(data) {
-    wss.clients.forEach(function each(client) {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        console.log(data.toString());
-        // const userId = JSON.parse(data.toString()).userId;
-        // clients[userId] = client;
-        client.send(data.toString());
-      }
-    });
-  });
+// This code generates unique userid for everyuser.
+const getUniqueID = () => {
+  const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+  return s4() + s4() + '-' + s4();
+};
+
+
+wss.on('request', function(request) {
+  var userID = getUniqueID();
+  console.log((new Date()) + ' Recieved a new connection from origin ' + request.origin + '.');
+  // You can rewrite this part of the code to accept only the requests from allowed origin
+  const connection = request.accept(null, request.origin);
+  clients[userID] = connection;
+  console.log('connected: ' + userID + ' in ' + Object.getOwnPropertyNames(clients));
+
 });
+
+wss.on('connection', function connection(socket) {
+  wss.on('close', function() {
+      console.log('clooooooooooooooosed');
+  });
+
+  socket.on('message', function incoming(data) {
+    const event = JSON.parse(data.toString());
+    if (event.eventName === 'connected') {
+          console.log(event.payload);
+          clients[event.payload] = socket;
+    }
+    if (event.eventName === 'newMessage') {
+      console.log(event);
+
+       const reciverId = JSON.parse(event.payload).to;
+      //  const {body, sender} = JSON.parse(event.payload);
+       if(clients[reciverId]) {
+         clients[reciverId].send(JSON.stringify({eventName: 'newMessage', payload : JSON.parse(event.payload)}));
+       }
+      }
+
+
+      if(event.eventName === 'connected') {
+        wss.clients.forEach(client => {
+          client.send(JSON.stringify({eventName: 'userConnected', payload : Object.keys(clients)  }));
+
+        });
+      }
+
+  });
+
+});
+
 
 app.post('/register', async (request, response) => {
   const { error } = UserSchema.validate(request.body);
@@ -155,7 +193,7 @@ app.use(function (req, res, next) {
 });
 
 const { API_PORT } = process.env;
-const port = API_PORT || 5000;
+const port = 8000;
 
 app.listen(port, () => {
   console.log(process.env.DATABASE_URL);
@@ -183,3 +221,6 @@ app.listen(port, () => {
 });
 
 module.exports = app;
+
+
+

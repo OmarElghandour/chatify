@@ -1,16 +1,25 @@
 import axios from "axios";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { UsersContext } from "../context/userProvider";
 
 
 const Messaging = () => {
     const context = useContext(UsersContext);
-    const [users] = context.users;
+    const [users, setUsers] = context.users;
     const [activeChat, setActiveChat] = context.activeChat;
 
     const handleClick = (userId) => {
+        console.log(users);
+        console.log(userId);
         setActiveChat(userId);
     }
+
+    // useEffect(() => {
+    // const loggedInUsers = JSON.parse(localStorage.getItem('userData')).id;
+    // const connectedUsers = users?.filter(user => user._id !== loggedInUsers);
+    // console.log(connectedUsers);
+    //  setUsers(connectedUsers);
+    // },[])
 
     return (
         <section className="section messaging">
@@ -53,20 +62,22 @@ const Messaging = () => {
 
             </div>
 
-
-
             <div className="messaging__chats col">
 
-            {users.map((user) => (  
-                <div key={user._id} onClick={() => handleClick(user._id)} className="messaging__chat row">
-                    <img className="messaging__chat-img" alt="" src="/about.jpg"/>
-                    <div className="messaging__chat-details" >
-                    <h5 className="messaging__chat-username">{user.userName}</h5>
-                    <p className="messaging__chat-latest">Lorem Ipsum is simply dummy</p>
+                {users.map((user) => (
+                    <div key={user._id}
+                     onClick={() => handleClick(user._id)}
+                     className={'messaging__chat row' + ' ' + (user._id === activeChat ? 'active' : '')}                     
+                     >
+                        <img className="messaging__chat-img" alt="" src="/about.jpg" />
+                        <div className="messaging__chat-details" >
+                            <h5 className="messaging__chat-username">{user.userName}</h5>
+                                <p>{user._id}</p>
+                            <p className="messaging__chat-latest">Lorem Ipsum is simply dummy</p>
+                        </div>
                     </div>
-                </div>
                 ))
-            }
+                }
 
 
             </div>

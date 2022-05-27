@@ -3,34 +3,46 @@ import { UsersContext } from "../context/userProvider";
 
 
 const ChatDetails = (props) => {
-    const {ws, messages } = props;
-    const [message,setMessage] = useState(null);
+    const { ws, messages } = props;
+    const [message, setMessage] = useState(null);
     const [curruntUser, setCurruntUser] = useState(null)
     const context = useContext(UsersContext);
     const [users] = context.users;
     const [activeChat, setActiveChat] = context.activeChat;
+    const [chats, setChats] = context.chats;
     const inputEl = useRef(null);
-
-
-    useEffect(() => {
-        console.log(messages);
-    },[messages]);
-
     useEffect(() => {
         getOpenChatUser();
-    },[]);
+    }, [activeChat]);
 
-   const getOpenChatUser = () => {
+
+    useEffect(() => {
+        if (!activeChat && users.length) {
+            setActiveChat(users[0]._id);
+        }
+    }, [users])
+
+    const getOpenChatUser = () => {
         const currentUser = users.find(user => user._id === activeChat);
         setCurruntUser(currentUser);
-    } 
-    
+    }
+
     const sendMessage = () => {
         const userData = JSON.parse(localStorage.getItem('userData'));
         const { id } = userData;
-        ws.send(JSON.stringify({data: message, activeChat, userId : id }));
+        const chatId = activeChat + '-' + id;
+        const messageBody = JSON.stringify({
+            body: message,
+            to: activeChat,
+            senderId: id,
+            chatId
+        });
+        ws.send(JSON.stringify({ eventName: "newMessage", payload: messageBody }));
+        setChats(prevState => ({
+            ...prevState,
+            [activeChat]: [...prevState[activeChat], { sender: id, body: message }]
+        }));
         inputEl.current.value = '';
-        props.addMessage(message);
     }
 
     const handelChanges = (value) => {
@@ -39,7 +51,6 @@ const ChatDetails = (props) => {
 
 
     return (
-        
         <div className="chat__details">
             <div className="chat__details-header row">
                 <div className="chat__profile row">
@@ -52,14 +63,18 @@ const ChatDetails = (props) => {
 
 
             <div className="chat-messages">
-                {messages.map((message, index) => (  
-                <div key={index} >
-                    <div className="chat__details-user-chat row">
-                        <p>{message.body}</p>
-                    </div><div className="chat__details-person-chat row">
-                            <p>hello repley </p>
+                {chats[activeChat]?.map((message, index) => (
+                    <div key={index} >
+                        {
+                            message.senderId === activeChat ?
+                                <div className="chat__details-user-chat row">
+                                    <p>{message.body}</p>
+                                </div> :
+                                <div  className="chat__details-user-chat-me row">
+                                    <p>{message.body}</p>
+                                </div>
+                        }
                     </div>
-                </div>    
                 ))
                 }
             </div>
@@ -67,10 +82,10 @@ const ChatDetails = (props) => {
 
             <div className="message-area row">
                 <input
-                name="message"
-                onChange={(e) => handelChanges(e.target.value)}
-                className="form-control chat-input"
-                ref={inputEl}
+                    name="message"
+                    onChange={(e) => handelChanges(e.target.value)}
+                    className="form-control chat-input"
+                    ref={inputEl}
                 >
                 </input>
                 <i className='bx bx-send bx-md chat__details-send' onClick={() => sendMessage()} ></i>
